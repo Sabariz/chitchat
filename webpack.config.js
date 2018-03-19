@@ -1,22 +1,28 @@
-var config = {
-    context: __dirname + "/app",
-    entry: "./main.js",
+const buildValidations = require('./build-utils/build-validations');
+const commonConfig = require('./build-utils/webpack.common');
 
-    output: {
-        filename: "bundle.js",
-        path: __dirname + "/dist",
-    },
-    module: {
-        loaders: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['react', 'env']
-                }
-            }
-        ],
-    }
+const webpackMerge = require('webpack-merge');
+
+const addons = (/* string | string[] */ addonsArg) => {
+  let addons = [...[addonsArg]] // Normalize array of addons (flatten)
+    .filter(Boolean); // If addons is undefined, filter it out
+
+  return addons.map(addonName =>
+    require(`./build-utils/addons/webpack.${addonName}.js`)
+  );
 };
-module.exports = config;
+
+module.exports = env => {
+  if (!env) {
+    throw new Error(buildValidations.ERR_NO_ENV_FLAG);
+  }
+
+  const envConfig = require(`./build-utils/webpack.${env.env}.js`);
+  const mergedConfig = webpackMerge(
+    commonConfig,
+    envConfig,
+    ...addons(env.addons)
+  );
+
+  return mergedConfig;
+};
