@@ -1,13 +1,13 @@
 {
-  "name": "chitchat",
+  "name": "chit-chat",
   "version": "1.0.0",
   "description": "React Chat Web Application",
   "main": "index.js",
   "author": "Sabariz",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack-dev-server --env.env=dev",
-    "dev:bundleanalyzer": "npm run dev --env.addons=bundleanalyzer",
+    "start": "webpack-dev-server --env.env=dev",
+    "start:bundleanalyzer": "npm run start --env.addons=bundleanalyzer",
     "prebuild": "rimraf dist",
     "build": "npm run prebuild && cross-env NODE_ENV=production webpack -p --env.env=prod",
     "build:bundleanalyzer": "npm run build --env.addons=bundleanalyzer"
@@ -51,12 +51,8 @@
   },
   "keywords": [
     "react",
-    "boilerplate",
-    "semantic ui",
-    "semantic ui react",
     "webpack 4",
     "webpack",
-    "hot module replacement",
-    "hmr"
+    "hot module replacement"
   ]
 }
